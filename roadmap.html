@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0B0B0D">
+<title>Roadmap | Impruvu Portal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared/portal.css">
+<style>
+.timeline-head{background:linear-gradient(180deg,var(--surface),var(--dark));border:1px solid var(--hairline);border-radius:20px;padding:24px;margin-bottom:18px;position:relative;overflow:hidden}
+.timeline-head::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at top right,var(--brand-glow),transparent 55%);pointer-events:none}
+.timeline-head-top{display:flex;align-items:center;justify-content:space-between;position:relative}
+.timeline-head-label{font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--muted)}
+.timeline-head-day{font-family:var(--font-mono);font-size:14px;font-weight:600;color:var(--brand)}
+.timeline-head-title{font-family:var(--font-display);font-size:24px;font-weight:700;color:var(--text-strong);margin:10px 0 16px;position:relative}
+.timeline-bar{height:8px;border-radius:4px;background:rgba(255,255,255,.06);overflow:hidden;position:relative}
+.timeline-bar-fill{height:100%;background:linear-gradient(90deg,var(--brand-deep),var(--brand-gold));border-radius:4px}
+
+.phase{background:var(--surface);border:1px solid var(--hairline);border-radius:18px;margin-bottom:12px;overflow:hidden;transition:border-color .15s}
+.phase.active{border-color:rgba(255,138,10,.3)}
+.phase-head{display:flex;align-items:center;gap:16px;padding:20px;cursor:pointer;width:100%;text-align:left}
+.phase-num{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:var(--font-mono);font-weight:700;font-size:16px}
+.phase.done .phase-num{background:rgba(48,164,108,.12);color:var(--good);border:1px solid rgba(48,164,108,.25)}
+.phase.active .phase-num{background:var(--brand-50);color:var(--brand);border:1px solid rgba(255,138,10,.3)}
+.phase.pending .phase-num{background:rgba(255,255,255,.04);color:var(--muted);border:1px solid var(--hairline-2)}
+.phase-info{flex:1;min-width:0}
+.phase-name{font-family:var(--font-display);font-size:16px;font-weight:700;color:var(--text-strong);line-height:1.2}
+.phase-days{font-size:12px;color:var(--muted);margin-top:3px}
+.phase-status{font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:4px 9px;border-radius:6px;flex-shrink:0}
+.phase.done .phase-status{background:rgba(48,164,108,.10);color:var(--good)}
+.phase.active .phase-status{background:var(--brand-50);color:var(--brand)}
+.phase.pending .phase-status{background:rgba(255,255,255,.04);color:var(--muted)}
+.phase-chevron{color:var(--muted);flex-shrink:0;transition:transform .2s}
+.phase-chevron svg{width:18px;height:18px;stroke-width:2}
+.phase.open .phase-chevron{transform:rotate(90deg)}
+.phase-body{max-height:0;overflow:hidden;transition:max-height .3s ease}
+.phase.open .phase-body{max-height:600px}
+.phase-body-inner{padding:0 20px 20px 20px;border-top:1px solid var(--hairline)}
+.phase-item{display:flex;align-items:flex-start;gap:12px;padding:12px 0;border-bottom:1px solid var(--hairline)}
+.phase-item:last-of-type{border-bottom:none}
+.phase-item-icon{width:20px;height:20px;border-radius:6px;flex-shrink:0;display:flex;align-items:center;justify-content:center;margin-top:1px}
+.phase-item.done .phase-item-icon{background:rgba(48,164,108,.12);color:var(--good)}
+.phase-item.active .phase-item-icon{background:var(--brand-50);color:var(--brand)}
+.phase-item.pending .phase-item-icon{background:rgba(255,255,255,.04);color:var(--muted)}
+.phase-item-icon svg{width:13px;height:13px;stroke-width:2.5}
+.phase-item-text{font-size:13px;color:var(--text);line-height:1.4;flex:1}
+.phase-item.pending .phase-item-text{color:var(--muted)}
+.phase-gate{margin-top:14px;padding:14px;border-radius:12px;background:var(--brand-50);border:1px solid rgba(255,138,10,.2);display:flex;align-items:center;gap:12px}
+.phase-gate-icon{width:32px;height:32px;border-radius:9px;background:rgba(255,138,10,.12);color:var(--brand);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.phase-gate-icon svg{width:16px;height:16px;stroke-width:2}
+.phase-gate-label{font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--muted)}
+.phase-gate-detail{font-size:13px;font-weight:600;color:var(--text-strong);margin-top:1px}
+
+.calendar-slot{margin-top:24px;background:var(--surface);border:1px solid var(--hairline);border-radius:18px;padding:40px 24px;text-align:center}
+.calendar-slot svg{width:36px;height:36px;color:var(--brand);stroke-width:1.6;margin-bottom:12px}
+.calendar-slot-title{font-family:var(--font-display);font-size:16px;font-weight:700;color:var(--text-strong);margin-bottom:6px}
+.calendar-slot-sub{font-size:13px;color:var(--muted)}
+</style>
+</head>
+<body>
+
+<div id="portal-nav" data-active="roadmap"></div>
+
+<main class="page">
+
+  <div class="greeting fade d1">
+    <div class="greeting-eyebrow">Your Roadmap</div>
+    <h1 class="greeting-h1">The path we're running</h1>
+    <p class="greeting-sub">Your 180-day engagement, phase by phase</p>
+  </div>
+
+  <div class="timeline-head fade d2">
+    <div class="timeline-head-top">
+      <span class="timeline-head-label">Engagement Progress</span>
+      <span class="timeline-head-day">Day 58 / 180</span>
+    </div>
+    <div class="timeline-head-title">Phase 2 · Execution</div>
+    <div class="timeline-bar"><div class="timeline-bar-fill" style="width:32%"></div></div>
+  </div>
+
+  <!-- P1 DONE -->
+  <div class="phase done fade d2">
+    <button class="phase-head">
+      <div class="phase-num"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12l5 5L20 7"/></svg></div>
+      <div class="phase-info"><div class="phase-name">Diagnose & Plan</div><div class="phase-days">Phase 1 · Days 1-30</div></div>
+      <span class="phase-status">Complete</span>
+      <span class="phase-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 6l6 6-6 6"/></svg></span>
+    </button>
+    <div class="phase-body"><div class="phase-body-inner">
+      <div class="phase-item done"><div class="phase-item-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M5 12l5 5L20 7"/></svg></div><div class="phase-item-text">Full capital position review across all five pillars</div></div>
+      <div class="phase-item done"><div class="phase-item-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M5 12l5 5L20 7"/></svg></div><div class="phase-item-text">Opening strategy session and objective set</div></div>
+      <div class="phase-item done"><div class="phase-item-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M5 12l5 5L20 7"/></svg></div><div class="phase-item-text">Move sequence mapped against dependencies</div></div>
+      <div class="phase-gate"><div class="phase-gate-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M5 12l5 5L20 7"/></svg></div><div><div class="phase-gate-label">Completed Day 30</div><div class="phase-gate-detail">Plan locked, execution sequence approved</div></div></div>
+    </div></div>
+  </div>
+
+  <!-- P2 ACTIVE -->
+  <div class="phase active open fade d3">
+    <button class="phase-head">
+      <div class="phase-num">2</div>
+      <div class="phase-info"><div class="phase-name">Execution</div><div class="phase-days">Phase 2 · Days 31-90</div></div>
+      <span class="phase-status">Active</span>
+      <span class="phase-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 6l6 6-6 6"/></svg></span>
+    </button>
+    <div class="phase-body"><div class="phase-body-inner">
+      <div class="phase-item done"><div class="phase-item-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M5 12l5 5L20 7"/></svg></div><div class="phase-item-text">Debt restructure plan built and underway</div></div>
+      <div class="phase-item active"><div class="phase-item-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="4"/></svg></div><div class="phase-item-text">Credit optimization in progress, utilization moves underway</div></div>
+      <div class="phase-item active"><div class="phase-item-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="4"/></svg></div><div class="phase-item-text">Funding shortlist matched, lender selection pending your input</div></div>
+      <div class="phase-item pending"><div class="phase-item-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="9"/></svg></div><div class="phase-item-text">Term renegotiation on existing obligations</div></div>
+      <div class="phase-gate"><div class="phase-gate-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 8v4l3 2"/><circle cx="12" cy="12" r="9"/></svg></div><div><div class="phase-gate-label">Next · Day 90</div><div class="phase-gate-detail">Execution review, structure phase begins</div></div></div>
+    </div></div>
+  </div>
+
+  <!-- P3 PENDING -->
+  <div class="phase pending fade d4">
+    <button class="phase-head">
+      <div class="phase-num">3</div>
+      <div class="phase-info"><div class="phase-name">Structure & Optimize</div><div class="phase-days">Phase 3 · Days 91-150</div></div>
+      <span class="phase-status">Upcoming</span>
+      <span class="phase-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 6l6 6-6 6"/></svg></span>
+    </button>
+    <div class="phase-body"><div class="phase-body-inner">
+      <div class="phase-item pending"><div class="phase-item-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="9"/></svg></div><div class="phase-item-text">Multi-entity structuring for liability and tax positioning</div></div>
+      <div class="phase-item pending"><div class="phase-item-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="9"/></svg></div><div class="phase-item-text">Financial resource introductions activated</div></div>
+      <div class="phase-item pending"><div class="phase-item-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="9"/></svg></div><div class="phase-item-text">Funding round executed on optimized position</div></div>
+      <div class="phase-gate"><div class="phase-gate-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 8v4l3 2"/><circle cx="12" cy="12" r="9"/></svg></div><div><div class="phase-gate-label">Day 150</div><div class="phase-gate-detail">Structure review, Capital Playbook drafted</div></div></div>
+    </div></div>
+  </div>
+
+  <!-- P4 PENDING -->
+  <div class="phase pending fade d4">
+    <button class="phase-head">
+      <div class="phase-num">4</div>
+      <div class="phase-info"><div class="phase-name">Lock & Hand Off</div><div class="phase-days">Phase 4 · Days 151-180</div></div>
+      <span class="phase-status">Upcoming</span>
+      <span class="phase-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 6l6 6-6 6"/></svg></span>
+    </button>
+    <div class="phase-body"><div class="phase-body-inner">
+      <div class="phase-item pending"><div class="phase-item-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="9"/></svg></div><div class="phase-item-text">Final Capital Playbook delivered, your complete record and roadmap</div></div>
+      <div class="phase-item pending"><div class="phase-item-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="9"/></svg></div><div class="phase-item-text">Closing strategy session and position walkthrough</div></div>
+      <div class="phase-item pending"><div class="phase-item-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="9"/></svg></div><div class="phase-item-text">Ongoing counsel options reviewed</div></div>
+      <div class="phase-gate"><div class="phase-gate-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 3l7 4v5c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V7z"/></svg></div><div><div class="phase-gate-label">Day 180</div><div class="phase-gate-detail">Engagement complete, Retain unlocks</div></div></div>
+    </div></div>
+  </div>
+
+  <div class="section-head fade d5" id="calendar"><h2 class="section-title">Your Calendar</h2></div>
+  <div class="calendar-slot fade d5">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18"/></svg>
+    <div class="calendar-slot-title">Your sessions, synced</div>
+    <div class="calendar-slot-sub">Your Google Calendar connects here once your engagement is live.</div>
+  </div>
+
+</main>
+
+<script src="shared/portal-nav.js"></script>
+<script src="shared/portal-demo.js"></script>
+<script>
+document.querySelectorAll('.phase-head').forEach(h=>h.addEventListener('click',()=>h.closest('.phase').classList.toggle('open')));
+</script>
+</body>
+</html>

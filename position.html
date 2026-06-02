@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0B0B0D">
+<title>Position | Impruvu Portal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared/portal.css">
+<style>
+.view-switcher{display:flex;gap:6px;background:var(--surface);border:1px solid var(--hairline);border-radius:12px;padding:4px;margin-bottom:20px}
+.view-switch{flex:1;padding:9px 12px;border-radius:9px;font-size:13px;font-weight:600;color:var(--muted);text-align:center;transition:background .15s,color .15s}
+.view-switch.active{background:var(--brand-50);color:var(--brand)}
+.view-pane{display:none}
+.view-pane.active{display:block;animation:fadeUp .4s ease}
+
+/* NOW: big score */
+.now-score{background:linear-gradient(180deg,var(--surface) 0%,var(--dark) 100%);border:1px solid var(--hairline);border-radius:20px;padding:32px 24px;position:relative;overflow:hidden;text-align:center}
+.now-score::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at top,var(--brand-glow) 0%,transparent 60%);pointer-events:none}
+.now-score-label{font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--muted);position:relative}
+.now-score-num{font-family:var(--font-mono);font-size:clamp(72px,18vw,120px);font-weight:700;color:var(--text-strong);letter-spacing:-4px;line-height:.9;margin:8px 0;position:relative}
+.now-score-of{font-family:var(--font-mono);font-size:18px;color:var(--muted)}
+.now-score-meta{display:flex;align-items:center;justify-content:center;gap:14px;margin-top:18px;position:relative;flex-wrap:wrap}
+.now-chip{display:inline-flex;align-items:center;gap:6px;font-family:var(--font-mono);font-size:13px;font-weight:600;padding:6px 12px;border-radius:8px}
+.now-chip.base{background:rgba(255,255,255,.04);border:1px solid var(--hairline-2);color:var(--muted)}
+.now-chip.delta{background:rgba(48,164,108,.10);border:1px solid rgba(48,164,108,.25);color:var(--good)}
+.now-chip.proj{background:var(--brand-50);border:1px solid rgba(255,138,10,.25);color:var(--brand)}
+
+/* pillar tiles */
+.pillar-tiles{display:grid;grid-template-columns:1fr;gap:12px;margin-top:16px}
+.pillar-tile{background:var(--surface);border:1px solid var(--hairline);border-radius:16px;padding:20px;display:flex;align-items:center;gap:16px;cursor:pointer;transition:border-color .15s,transform .1s;text-align:left;width:100%}
+.pillar-tile:hover{border-color:var(--hairline-2)}
+.pillar-tile:active{transform:scale(.995)}
+.pillar-ring{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:var(--font-mono);font-weight:700;font-size:15px;color:#fff}
+.pillar-tile.credit .pillar-ring{background:rgba(255,138,10,.14);color:var(--pillar-credit);border:1px solid rgba(255,138,10,.3)}
+.pillar-tile.debt .pillar-ring{background:rgba(229,72,77,.14);color:var(--pillar-debt);border:1px solid rgba(229,72,77,.3)}
+.pillar-tile.funding .pillar-ring{background:rgba(48,164,108,.14);color:var(--pillar-funding);border:1px solid rgba(48,164,108,.3)}
+.pillar-tile.structure .pillar-ring{background:rgba(142,123,239,.14);color:var(--pillar-structure);border:1px solid rgba(142,123,239,.3)}
+.pillar-tile.balance .pillar-ring{background:rgba(14,165,233,.14);color:var(--pillar-balance);border:1px solid rgba(14,165,233,.3)}
+.pillar-tile-body{flex:1;min-width:0}
+.pillar-tile-name{font-family:var(--font-display);font-size:16px;font-weight:700;color:var(--text-strong);margin-bottom:6px}
+.pillar-tile-bar{height:6px;border-radius:3px;background:rgba(255,255,255,.06);overflow:hidden;margin-bottom:6px}
+.pillar-tile-bar-fill{height:100%;border-radius:3px}
+.pillar-tile.credit .pillar-tile-bar-fill{background:var(--pillar-credit)}
+.pillar-tile.debt .pillar-tile-bar-fill{background:var(--pillar-debt)}
+.pillar-tile.funding .pillar-tile-bar-fill{background:var(--pillar-funding)}
+.pillar-tile.structure .pillar-tile-bar-fill{background:var(--pillar-structure)}
+.pillar-tile.balance .pillar-tile-bar-fill{background:var(--pillar-balance)}
+.pillar-tile-meta{font-size:12px;color:var(--muted)}
+.pillar-tile-score{font-family:var(--font-mono);font-size:18px;font-weight:700;color:var(--text-strong);flex-shrink:0}
+.pillar-tile-chev{color:var(--muted);flex-shrink:0}
+.pillar-tile-chev svg{width:18px;height:18px;stroke-width:2}
+
+/* OVER TIME */
+.chart-card{background:var(--surface);border:1px solid var(--hairline);border-radius:20px;padding:24px}
+.ot-toggle{display:flex;gap:7px;overflow-x:auto;padding-bottom:6px;margin-bottom:18px;-webkit-overflow-scrolling:touch}
+.ot-chip{flex-shrink:0;display:inline-flex;align-items:center;gap:7px;padding:8px 14px;border-radius:100px;font-size:12px;font-weight:600;color:var(--muted);background:var(--surface);border:1px solid var(--hairline);transition:all .15s;white-space:nowrap}
+.ot-chip .swatch{width:9px;height:9px;border-radius:3px;flex-shrink:0}
+.ot-chip.active{color:var(--text-strong);background:rgba(255,255,255,.05);border-color:var(--hairline-2)}
+.ot-chip[data-series="total"].active{border-color:rgba(255,255,255,.25)}
+.ot-chip[data-series="credit"].active{border-color:rgba(255,138,10,.5);background:rgba(255,138,10,.08)}
+.ot-chip[data-series="debt"].active{border-color:rgba(229,72,77,.5);background:rgba(229,72,77,.08)}
+.ot-chip[data-series="funding"].active{border-color:rgba(48,164,108,.5);background:rgba(48,164,108,.08)}
+.ot-chip[data-series="structure"].active{border-color:rgba(142,123,239,.5);background:rgba(142,123,239,.08)}
+.ot-chip[data-series="balance"].active{border-color:rgba(14,165,233,.5);background:rgba(14,165,233,.08)}
+.chart-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;margin-bottom:6px}
+.chart-title{font-family:var(--font-display);font-size:16px;font-weight:700;color:var(--text-strong)}
+.chart-sub{font-size:12px;color:var(--muted);margin-bottom:18px}
+.chart-wrap{position:relative}
+.chart-svg{width:100%;height:220px;overflow:visible;display:block}
+.chart-xlabels{display:flex;justify-content:space-between;margin-top:12px;font-family:var(--font-mono);font-size:10px;color:var(--muted)}
+.chart-xlabels span.now{color:var(--brand);font-weight:700}
+.ot-legend{display:flex;flex-wrap:wrap;gap:14px;margin-top:18px;padding-top:18px;border-top:1px solid var(--hairline)}
+.ot-leg{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--muted)}
+.ot-leg .dot{width:10px;height:10px;border-radius:3px}
+.ot-leg .val{font-family:var(--font-mono);color:var(--text);font-weight:600;margin-left:2px}
+.factor-trend-note{margin-top:16px;padding:14px 16px;background:rgba(255,255,255,.02);border:1px solid var(--hairline);border-radius:12px;font-size:12px;color:var(--muted);line-height:1.5}
+.factor-trend-note strong{color:var(--text)}
+.chart-title{font-family:var(--font-display);font-size:16px;font-weight:700;color:var(--text-strong);margin-bottom:20px}
+.chart{position:relative;height:200px;display:flex;align-items:flex-end;gap:0;padding-left:8px}
+.chart-svg{width:100%;height:200px;overflow:visible}
+.chart-legend{display:flex;gap:18px;margin-top:18px;flex-wrap:wrap}
+.chart-leg{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--muted)}
+.chart-leg .swatch{width:10px;height:10px;border-radius:3px}
+
+/* BY PILLAR factor drill */
+.factor-group{margin-top:16px;background:var(--surface);border:1px solid var(--hairline);border-radius:18px;overflow:hidden}
+.factor-head{padding:18px 20px;display:flex;align-items:center;gap:14px;border-bottom:1px solid var(--hairline)}
+.factor-head-ring{width:40px;height:40px;border-radius:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:var(--font-mono);font-weight:700;font-size:12px}
+.factor-group.credit .factor-head-ring{background:rgba(255,138,10,.14);color:var(--pillar-credit)}
+.factor-group.debt .factor-head-ring{background:rgba(229,72,77,.14);color:var(--pillar-debt)}
+.factor-group.funding .factor-head-ring{background:rgba(48,164,108,.14);color:var(--pillar-funding)}
+.factor-group.structure .factor-head-ring{background:rgba(142,123,239,.14);color:var(--pillar-structure)}
+.factor-group.balance .factor-head-ring{background:rgba(14,165,233,.14);color:var(--pillar-balance)}
+.factor-head-name{font-family:var(--font-display);font-size:16px;font-weight:700;color:var(--text-strong)}
+.factor-head-score{margin-left:auto;font-family:var(--font-mono);font-size:15px;font-weight:700;color:var(--text-strong)}
+.factor-row{padding:14px 20px;display:flex;align-items:flex-start;gap:14px;border-bottom:1px solid var(--hairline)}
+.factor-row:last-child{border-bottom:none}
+.factor-sev{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:6px}
+.factor-sev.none{background:var(--good)}
+.factor-sev.minor{background:var(--warn)}
+.factor-sev.moderate{background:#F5821F}
+.factor-sev.severe{background:var(--severe)}
+.factor-body{flex:1;min-width:0}
+.factor-name{font-size:14px;font-weight:600;color:var(--text-strong);margin-bottom:3px}
+.factor-desc{font-size:12px;color:var(--muted);line-height:1.4}
+.factor-pts{font-family:var(--font-mono);font-size:13px;font-weight:600;color:var(--text);flex-shrink:0}
+@media (max-width:400px){
+  .factor-row{padding:13px 16px;gap:10px}
+  .factor-head{padding:16px}
+  .now-score{padding:28px 18px}
+}
+</style>
+</head>
+<body>
+
+<div id="portal-nav" data-active="position"></div>
+
+<main class="page">
+
+  <div class="greeting fade d1">
+    <div class="greeting-eyebrow">Your Capital Position</div>
+    <h1 class="greeting-h1">Where you stand</h1>
+    <p class="greeting-sub">Scored across the five pillars of your capital position</p>
+  </div>
+
+  <div class="view-switcher fade d2">
+    <button class="view-switch active" data-view="now">Now</button>
+    <button class="view-switch" data-view="time">Over Time</button>
+    <button class="view-switch" data-view="pillar">By Pillar</button>
+  </div>
+
+  <!-- NOW -->
+  <div class="view-pane active" id="pane-now">
+    <div class="now-score fade d2">
+      <div class="now-score-label">Capital Score</div>
+      <div class="now-score-num">642</div>
+      <div class="now-score-of">out of 1000 · Building</div>
+      <div class="now-score-meta">
+        <span class="now-chip base">Baseline 595</span>
+        <span class="now-chip delta"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M17 7H9M17 7v8"/></svg> +47</span>
+        <span class="now-chip proj">Projected 780</span>
+      </div>
+    </div>
+    <div class="pillar-tiles">
+      <button class="pillar-tile credit fade d3" data-pillar="credit"><div class="pillar-ring">71</div><div class="pillar-tile-body"><div class="pillar-tile-name">Credit</div><div class="pillar-tile-bar"><div class="pillar-tile-bar-fill" style="width:71%"></div></div><div class="pillar-tile-meta">Personal and business credit profile</div></div><div class="pillar-tile-score">142<span style="color:var(--muted);font-size:12px">/200</span></div><div class="pillar-tile-chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 6l6 6-6 6"/></svg></div></button>
+      <button class="pillar-tile debt fade d3" data-pillar="debt"><div class="pillar-ring">58</div><div class="pillar-tile-body"><div class="pillar-tile-name">Debt</div><div class="pillar-tile-bar"><div class="pillar-tile-bar-fill" style="width:58%"></div></div><div class="pillar-tile-meta">Load, utilization, and restructure opportunity</div></div><div class="pillar-tile-score">116<span style="color:var(--muted);font-size:12px">/200</span></div><div class="pillar-tile-chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 6l6 6-6 6"/></svg></div></button>
+      <button class="pillar-tile funding fade d4" data-pillar="funding"><div class="pillar-ring">64</div><div class="pillar-tile-body"><div class="pillar-tile-name">Funding</div><div class="pillar-tile-bar"><div class="pillar-tile-bar-fill" style="width:64%"></div></div><div class="pillar-tile-meta">Capacity, access, and terms</div></div><div class="pillar-tile-score">128<span style="color:var(--muted);font-size:12px">/200</span></div><div class="pillar-tile-chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 6l6 6-6 6"/></svg></div></button>
+      <button class="pillar-tile structure fade d4" data-pillar="structure"><div class="pillar-ring">60</div><div class="pillar-tile-body"><div class="pillar-tile-name">Structure</div><div class="pillar-tile-bar"><div class="pillar-tile-bar-fill" style="width:60%"></div></div><div class="pillar-tile-meta">Entities, accounts, protection, separation</div></div><div class="pillar-tile-score">120<span style="color:var(--muted);font-size:12px">/200</span></div><div class="pillar-tile-chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 6l6 6-6 6"/></svg></div></button>
+      <button class="pillar-tile balance fade d5" data-pillar="balance"><div class="pillar-ring">68</div><div class="pillar-tile-body"><div class="pillar-tile-name">Balance</div><div class="pillar-tile-bar"><div class="pillar-tile-bar-fill" style="width:68%"></div></div><div class="pillar-tile-meta">Inflow, outflow, ratios, liabilities</div></div><div class="pillar-tile-score">136<span style="color:var(--muted);font-size:12px">/200</span></div><div class="pillar-tile-chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 6l6 6-6 6"/></svg></div></button>
+    </div>
+  </div>
+
+  <!-- OVER TIME -->
+  <div class="view-pane" id="pane-time">
+    <div class="ot-toggle fade d2">
+      <button class="ot-chip active" data-series="all">All Pillars</button>
+      <button class="ot-chip" data-series="total"><span class="swatch" style="background:#fff"></span>Total Score</button>
+      <button class="ot-chip" data-series="credit"><span class="swatch" style="background:var(--pillar-credit)"></span>Credit</button>
+      <button class="ot-chip" data-series="debt"><span class="swatch" style="background:var(--pillar-debt)"></span>Debt</button>
+      <button class="ot-chip" data-series="funding"><span class="swatch" style="background:var(--pillar-funding)"></span>Funding</button>
+      <button class="ot-chip" data-series="structure"><span class="swatch" style="background:var(--pillar-structure)"></span>Structure</button>
+      <button class="ot-chip" data-series="balance"><span class="swatch" style="background:var(--pillar-balance)"></span>Balance</button>
+    </div>
+    <div class="chart-card fade d2">
+      <div class="chart-head">
+        <div>
+          <div class="chart-title" id="otTitle">All pillars over time</div>
+          <div class="chart-sub" id="otSub">Every pillar trended across your engagement, scaled to 100%</div>
+        </div>
+      </div>
+      <div class="chart-wrap">
+        <svg class="chart-svg" id="otChart" viewBox="0 0 600 220" preserveAspectRatio="none"></svg>
+      </div>
+      <div class="chart-xlabels" id="otX"></div>
+      <div class="ot-legend" id="otLegend"></div>
+      <div class="factor-trend-note" id="otNote" style="display:none"></div>
+    </div>
+  </div>
+
+  <!-- BY PILLAR -->
+  <div class="view-pane" id="pane-pillar">
+    <div class="factor-group credit fade d2" id="f-credit">
+      <div class="factor-head"><div class="factor-head-ring">CR</div><div class="factor-head-name">Credit</div><div class="factor-head-score">142 / 200</div></div>
+      <div class="factor-row"><div class="factor-sev minor"></div><div class="factor-body"><div class="factor-name">Business credit profile depth</div><div class="factor-desc">Thin file. Few reporting tradelines established under the entity.</div></div><div class="factor-pts">26/40</div></div>
+      <div class="factor-row"><div class="factor-sev none"></div><div class="factor-body"><div class="factor-name">Personal credit standing</div><div class="factor-desc">Strong. No standing negatives, healthy history.</div></div><div class="factor-pts">36/40</div></div>
+      <div class="factor-row"><div class="factor-sev moderate"></div><div class="factor-body"><div class="factor-name">Utilization across revolving lines</div><div class="factor-desc">Running high. Above the threshold that suppresses scoring.</div></div><div class="factor-pts">22/40</div></div>
+      <div class="factor-row"><div class="factor-sev minor"></div><div class="factor-body"><div class="factor-name">Inquiry and recent activity</div><div class="factor-desc">A few recent pulls. Settling, low ongoing impact.</div></div><div class="factor-pts">30/40</div></div>
+      <div class="factor-row"><div class="factor-sev none"></div><div class="factor-body"><div class="factor-name">Account age and mix</div><div class="factor-desc">Good seasoning and a healthy mix of account types.</div></div><div class="factor-pts">28/40</div></div>
+    </div>
+    <div class="factor-group debt fade d3" id="f-debt">
+      <div class="factor-head"><div class="factor-head-ring">DE</div><div class="factor-head-name">Debt</div><div class="factor-head-score">116 / 200</div></div>
+      <div class="factor-row"><div class="factor-sev moderate"></div><div class="factor-body"><div class="factor-name">Total debt load vs capacity</div><div class="factor-desc">Carrying more than the position comfortably supports.</div></div><div class="factor-pts">20/40</div></div>
+      <div class="factor-row"><div class="factor-sev moderate"></div><div class="factor-body"><div class="factor-name">Blended interest rate</div><div class="factor-desc">Paying above-market rates relative to your profile.</div></div><div class="factor-pts">22/40</div></div>
+      <div class="factor-row"><div class="factor-sev minor"></div><div class="factor-body"><div class="factor-name">Restructure opportunity</div><div class="factor-desc">Clear consolidation and renegotiation moves available.</div></div><div class="factor-pts">26/40</div></div>
+      <div class="factor-row"><div class="factor-sev none"></div><div class="factor-body"><div class="factor-name">Payment history</div><div class="factor-desc">Clean. On-time across all current obligations.</div></div><div class="factor-pts">30/40</div></div>
+      <div class="factor-row"><div class="factor-sev minor"></div><div class="factor-body"><div class="factor-name">Debt service coverage</div><div class="factor-desc">Adequate but tight. Improving as restructure lands.</div></div><div class="factor-pts">18/40</div></div>
+    </div>
+    <div class="factor-group funding fade d3" id="f-funding">
+      <div class="factor-head"><div class="factor-head-ring">FU</div><div class="factor-head-name">Funding</div><div class="factor-head-score">128 / 200</div></div>
+      <div class="factor-row"><div class="factor-sev minor"></div><div class="factor-body"><div class="factor-name">Current funding capacity</div><div class="factor-desc">Room to grow once credit and structure are optimized.</div></div><div class="factor-pts">24/40</div></div>
+      <div class="factor-row"><div class="factor-sev none"></div><div class="factor-body"><div class="factor-name">Lender relationships</div><div class="factor-desc">Strong shortlist matched to your profile and goals.</div></div><div class="factor-pts">30/40</div></div>
+      <div class="factor-row"><div class="factor-sev minor"></div><div class="factor-body"><div class="factor-name">Terms quality</div><div class="factor-desc">Current terms are improvable. Better options in reach.</div></div><div class="factor-pts">26/40</div></div>
+      <div class="factor-row"><div class="factor-sev none"></div><div class="factor-body"><div class="factor-name">Readiness to fund</div><div class="factor-desc">Position is nearly ready for the next funding round.</div></div><div class="factor-pts">28/40</div></div>
+      <div class="factor-row"><div class="factor-sev minor"></div><div class="factor-body"><div class="factor-name">Stacking and sequencing</div><div class="factor-desc">Sequence mapped to avoid hurting the next approval.</div></div><div class="factor-pts">20/40</div></div>
+    </div>
+    <div class="factor-group structure fade d4" id="f-structure">
+      <div class="factor-head"><div class="factor-head-ring">ST</div><div class="factor-head-name">Structure</div><div class="factor-head-score">120 / 200</div></div>
+      <div class="factor-row"><div class="factor-sev moderate"></div><div class="factor-body"><div class="factor-name">Entity setup</div><div class="factor-desc">Single entity carrying everything. Separation needed.</div></div><div class="factor-pts">20/40</div></div>
+      <div class="factor-row"><div class="factor-sev minor"></div><div class="factor-body"><div class="factor-name">Liability separation</div><div class="factor-desc">Personal and business exposure not fully separated.</div></div><div class="factor-pts">24/40</div></div>
+      <div class="factor-row"><div class="factor-sev minor"></div><div class="factor-body"><div class="factor-name">Banking and accounts</div><div class="factor-desc">Functional but not optimized for the structure ahead.</div></div><div class="factor-pts">26/40</div></div>
+      <div class="factor-row"><div class="factor-sev none"></div><div class="factor-body"><div class="factor-name">Tax positioning</div><div class="factor-desc">Reasonable footing. Refinements identified.</div></div><div class="factor-pts">28/40</div></div>
+      <div class="factor-row"><div class="factor-sev minor"></div><div class="factor-body"><div class="factor-name">Asset protection</div><div class="factor-desc">Gaps to close as multi-entity structure is built.</div></div><div class="factor-pts">22/40</div></div>
+    </div>
+    <div class="factor-group balance fade d4" id="f-balance">
+      <div class="factor-head"><div class="factor-head-ring">BA</div><div class="factor-head-name">Balance</div><div class="factor-head-score">136 / 200</div></div>
+      <div class="factor-row"><div class="factor-sev none"></div><div class="factor-body"><div class="factor-name">Income stability</div><div class="factor-desc">Consistent inflow across business and personal.</div></div><div class="factor-pts">32/40</div></div>
+      <div class="factor-row"><div class="factor-sev minor"></div><div class="factor-body"><div class="factor-name">Cash flow ratio</div><div class="factor-desc">Positive but tighter than ideal for the debt load.</div></div><div class="factor-pts">26/40</div></div>
+      <div class="factor-row"><div class="factor-sev none"></div><div class="factor-body"><div class="factor-name">Reserve position</div><div class="factor-desc">Healthy runway held in reserve.</div></div><div class="factor-pts">30/40</div></div>
+      <div class="factor-row"><div class="factor-sev minor"></div><div class="factor-body"><div class="factor-name">Liability ratio</div><div class="factor-desc">Improving as the restructure brings obligations down.</div></div><div class="factor-pts">24/40</div></div>
+      <div class="factor-row"><div class="factor-sev none"></div><div class="factor-body"><div class="factor-name">Outflow discipline</div><div class="factor-desc">Controlled spending, clear categories.</div></div><div class="factor-pts">24/40</div></div>
+    </div>
+  </div>
+
+</main>
+
+<script src="shared/portal-nav.js"></script>
+<script src="shared/portal-demo.js"></script>
+<script>
+(function(){
+  const switches=document.querySelectorAll('.view-switch');
+  const panes={now:document.getElementById('pane-now'),time:document.getElementById('pane-time'),pillar:document.getElementById('pane-pillar')};
+  switches.forEach(s=>s.addEventListener('click',()=>{
+    switches.forEach(x=>x.classList.remove('active'));s.classList.add('active');
+    Object.values(panes).forEach(p=>p.classList.remove('active'));
+    panes[s.dataset.view].classList.add('active');
+  }));
+  // pillar tile -> jump to factor group in By Pillar
+  document.querySelectorAll('.pillar-tile').forEach(t=>t.addEventListener('click',()=>{
+    switches.forEach(x=>x.classList.remove('active'));
+    document.querySelector('.view-switch[data-view="pillar"]').classList.add('active');
+    Object.values(panes).forEach(p=>p.classList.remove('active'));
+    panes.pillar.classList.add('active');
+    setTimeout(()=>{document.getElementById('f-'+t.dataset.pillar)?.scrollIntoView({behavior:'smooth',block:'start'});},80);
+  }));
+})();
+
+// ── OVER TIME chart engine ──
+(function(){
+  const PERIODS = ["Day 1","Day 30","Day 58","Now","Proj"];
+  const COLORS = {total:"#FFFFFF",credit:"#FF8A0A",debt:"#E5484D",funding:"#30A46C",structure:"#8E7BEF",balance:"#0EA5E9"};
+  const NAMES = {total:"Total Score",credit:"Credit",debt:"Debt",funding:"Funding",structure:"Structure",balance:"Balance"};
+  // pillar series are /200; total is /1000. Charts normalize to % of own max.
+  const SERIES = {
+    total:    {max:1000, pts:[595,612,642,642,780]},
+    credit:   {max:200,  pts:[120,131,142,142,176]},
+    debt:     {max:200,  pts:[96,108,116,116,168]},
+    funding:  {max:200,  pts:[108,120,128,128,160]},
+    structure:{max:200,  pts:[104,112,120,120,150]},
+    balance:  {max:200,  pts:[120,128,136,136,164]},
+  };
+  // factor-level trends per pillar (each /40), shown when a single pillar is isolated
+  const FACTORS = {
+    credit:[
+      {n:"Business credit profile depth", pts:[18,22,26,26,36]},
+      {n:"Personal credit standing",       pts:[34,35,36,36,38]},
+      {n:"Utilization across lines",       pts:[14,18,22,22,34]},
+      {n:"Inquiry and recent activity",    pts:[26,28,30,30,34]},
+      {n:"Account age and mix",            pts:[28,28,28,28,34]},
+    ],
+    debt:[
+      {n:"Total debt load vs capacity",    pts:[14,17,20,20,34]},
+      {n:"Blended interest rate",          pts:[16,19,22,22,32]},
+      {n:"Restructure opportunity",        pts:[18,22,26,26,36]},
+      {n:"Payment history",                pts:[28,29,30,30,34]},
+      {n:"Debt service coverage",          pts:[12,15,18,18,32]},
+    ],
+    funding:[
+      {n:"Current funding capacity",       pts:[18,21,24,24,34]},
+      {n:"Lender relationships",           pts:[24,27,30,30,34]},
+      {n:"Terms quality",                  pts:[20,23,26,26,32]},
+      {n:"Readiness to fund",              pts:[24,26,28,28,32]},
+      {n:"Stacking and sequencing",        pts:[14,17,20,20,28]},
+    ],
+    structure:[
+      {n:"Entity setup",                   pts:[14,17,20,20,32]},
+      {n:"Liability separation",           pts:[18,21,24,24,30]},
+      {n:"Banking and accounts",           pts:[22,24,26,26,30]},
+      {n:"Tax positioning",                pts:[26,27,28,28,30]},
+      {n:"Asset protection",               pts:[16,19,22,22,28]},
+    ],
+    balance:[
+      {n:"Income stability",               pts:[28,30,32,32,34]},
+      {n:"Cash flow ratio",                pts:[18,22,26,26,32]},
+      {n:"Reserve position",               pts:[26,28,30,30,32]},
+      {n:"Liability ratio",                pts:[16,20,24,24,34]},
+      {n:"Outflow discipline",             pts:[20,22,24,24,30]},
+    ],
+  };
+  const FACTOR_COLORS = ["#FF8A0A","#0EA5E9","#30A46C","#8E7BEF","#E5484D"];
+
+  const W=600,H=220,padT=18,padB=18;
+  const chart=document.getElementById('otChart');
+  const xlabels=document.getElementById('otX');
+  const legend=document.getElementById('otLegend');
+  const title=document.getElementById('otTitle');
+  const sub=document.getElementById('otSub');
+  const note=document.getElementById('otNote');
+  const chips=document.querySelectorAll('.ot-chip');
+
+  function xAt(i,n){return (i/(n-1))*W;}
+  function yAt(pct){return padT + (1-pct)*(H-padT-padB);}
+  function pathFrom(pts,max){
+    return pts.map((v,i)=>`${i===0?'M':'L'}${xAt(i,pts.length).toFixed(1)},${yAt(v/max).toFixed(1)}`).join(' ');
+  }
+  function lineSVG(pts,max,color,width,withDots,gradId){
+    const n=pts.length; let s='';
+    if(gradId){
+      const area=pathFrom(pts,max)+` L${W},${H-padB} L0,${H-padB} Z`;
+      s+=`<path d="${area}" fill="url(#${gradId})"/>`;
+    }
+    s+=`<path d="${pathFrom(pts,max)}" fill="none" stroke="${color}" stroke-width="${width}" stroke-linecap="round" stroke-linejoin="round"/>`;
+    if(withDots){pts.forEach((v,i)=>{const last=i===n-1;s+=`<circle cx="${xAt(i,n).toFixed(1)}" cy="${yAt(v/max).toFixed(1)}" r="${last?5:4}" fill="${color}" ${last?'stroke="#0B0B0D" stroke-width="2"':''}/>`;});}
+    return s;
+  }
+  function gridSVG(){let s='';[0.25,0.5,0.75].forEach(p=>{const y=yAt(p).toFixed(1);s+=`<line x1="0" y1="${y}" x2="${W}" y2="${y}" stroke="rgba(255,255,255,.05)"/>`;});return s;}
+  function xLabelsFor(pts,max){
+    xlabels.innerHTML = PERIODS.map((p,i)=>{
+      const isNow=p==="Now";
+      const val = pts? Math.round(pts[i]) : '';
+      return `<span class="${isNow?'now':''}">${p}${val!==''?' · '+val:''}</span>`;
+    }).join('');
+  }
+
+  function renderAll(){
+    let defs='', body=gridSVG();
+    ['credit','debt','funding','structure','balance'].forEach(k=>{
+      body+=lineSVG(SERIES[k].pts,SERIES[k].max,COLORS[k],2.5,true,null);
+    });
+    chart.innerHTML=`<defs>${defs}</defs>${body}`;
+    title.textContent="All pillars over time";
+    sub.textContent="Every pillar trended across your engagement, scaled to its own 200-point max";
+    xLabelsFor(null,null);
+    legend.innerHTML=['credit','debt','funding','structure','balance'].map(k=>{
+      const s=SERIES[k];return `<span class="ot-leg"><span class="dot" style="background:${COLORS[k]}"></span>${NAMES[k]}<span class="val">${s.pts[2]}/200</span></span>`;
+    }).join('');
+    note.style.display='none';
+  }
+
+  function renderSingle(key){
+    const s=SERIES[key];
+    const grad=`grad-${key}`;
+    const rgba={total:'255,255,255',credit:'255,138,10',debt:'229,72,77',funding:'48,164,108',structure:'142,123,239',balance:'14,165,233'}[key];
+    let defs=`<linearGradient id="${grad}" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="rgba(${rgba},.30)"/><stop offset="100%" stop-color="rgba(${rgba},0)"/></linearGradient>`;
+    let body=gridSVG()+lineSVG(s.pts,s.max,COLORS[key],3,true,grad);
+    chart.innerHTML=`<defs>${defs}</defs>${body}`;
+    title.textContent=`${NAMES[key]} over time`;
+    if(key==='total'){
+      sub.textContent="Your total Capital Score across the engagement";
+      xLabelsFor(s.pts,s.max);
+      legend.innerHTML=`<span class="ot-leg"><span class="dot" style="background:${COLORS[key]}"></span>Total Score<span class="val">${s.pts[2]} / 1000</span></span>`;
+      note.style.display='none';
+      return;
+    }
+    sub.textContent=`The ${NAMES[key]} pillar, broken down by its individual factors`;
+    xLabelsFor(s.pts,s.max);
+    // factor breakdown lines, drawn lighter, in a second mini-render note
+    const factors=FACTORS[key];
+    // overlay factor lines (each /40) faintly on same chart
+    let fbody='';
+    factors.forEach((f,i)=>{fbody+=lineSVG(f.pts,40,FACTOR_COLORS[i%5],1.6,false,null);});
+    // re-render: pillar line bold on top of factor lines
+    chart.innerHTML=`<defs>${defs}</defs>${gridSVG()}${fbody}${lineSVG(s.pts,s.max,COLORS[key],3,true,grad)}`;
+    legend.innerHTML=factors.map((f,i)=>`<span class="ot-leg"><span class="dot" style="background:${FACTOR_COLORS[i%5]}"></span>${f.n}<span class="val">${f.pts[2]}/40</span></span>`).join('');
+    note.style.display='block';
+    note.innerHTML=`<strong>${NAMES[key]}:</strong> the bold line is the pillar total. The thinner lines are its individual factors, each scored out of 40, trended across your engagement so you can see exactly which pieces are moving.`;
+  }
+
+  chips.forEach(c=>c.addEventListener('click',()=>{
+    chips.forEach(x=>x.classList.remove('active'));c.classList.add('active');
+    const s=c.dataset.series;
+    if(s==='all') renderAll(); else renderSingle(s);
+  }));
+
+  renderAll();
+})();
+</script>
+</body>
+</html>

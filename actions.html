@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0B0B0D">
+<title>Actions | Impruvu Portal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared/portal.css">
+<style>
+.summary-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px}
+.summary-card{background:var(--surface);border:1px solid var(--hairline);border-radius:14px;padding:16px 14px;text-align:center}
+.summary-card.alert{border-color:rgba(245,166,35,.25);background:linear-gradient(180deg,rgba(245,166,35,.05),var(--surface))}
+.summary-value{font-family:var(--font-mono);font-size:26px;font-weight:700;color:var(--text-strong);letter-spacing:-1px;line-height:1}
+.summary-card.alert .summary-value{color:var(--warn)}
+.summary-card.done .summary-value{color:var(--good)}
+.summary-label{font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-top:6px}
+
+.action-tabs{display:flex;gap:6px;background:var(--surface);border:1px solid var(--hairline);border-radius:12px;padding:4px;margin-bottom:14px}
+.action-tab{flex:1;padding:9px 12px;border-radius:9px;font-size:13px;font-weight:600;color:var(--muted);text-align:center;transition:background .15s,color .15s}
+.action-tab.active{background:var(--brand-50);color:var(--brand)}
+
+.filter-chips{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;margin-bottom:16px;-webkit-overflow-scrolling:touch}
+.filter-chip{flex-shrink:0;padding:7px 14px;border-radius:100px;font-size:12px;font-weight:600;color:var(--muted);background:var(--surface);border:1px solid var(--hairline);transition:all .15s;white-space:nowrap}
+.filter-chip.active{background:var(--brand-50);border-color:rgba(255,138,10,.3);color:var(--brand)}
+
+.action-list{display:flex;flex-direction:column;gap:10px}
+.action-item{background:var(--surface);border:1px solid var(--hairline);border-radius:14px;padding:18px;display:flex;align-items:flex-start;gap:14px;position:relative;overflow:hidden;transition:border-color .15s,transform .1s}
+.action-item:hover{border-color:var(--hairline-2)}
+.action-item.hidden{display:none}
+.action-owner{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:var(--font-mono);font-size:10px;font-weight:700}
+.action-owner.you{background:var(--brand-50);color:var(--brand);border:1px solid rgba(255,138,10,.2)}
+.action-owner.done{background:rgba(48,164,108,.10);color:var(--good);border:1px solid rgba(48,164,108,.2)}
+.action-owner.done svg{width:18px;height:18px;stroke-width:2.5}
+.action-body{flex:1;min-width:0}
+.action-title{font-size:14px;font-weight:600;color:var(--text-strong);line-height:1.35;margin-bottom:5px}
+.action-desc{font-size:12px;color:var(--muted);line-height:1.4;margin-bottom:7px}
+.action-meta{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.action-meta .sep{opacity:.4}
+.action-meta .due-soon{color:var(--warn);font-weight:600}
+.action-pill{font-size:10px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;padding:2px 7px;border-radius:4px;background:rgba(255,255,255,.05);color:var(--muted)}
+.action-btn{flex-shrink:0;align-self:center;display:inline-flex;align-items:center;gap:6px;background:var(--brand);color:#fff;font-size:12px;font-weight:600;padding:8px 14px;border-radius:9px;transition:background .15s}
+.action-btn:hover{background:var(--brand-deep)}
+.action-btn.ghost{background:rgba(255,255,255,.04);color:var(--text);border:1px solid var(--hairline-2)}
+.action-completed-at{font-family:var(--font-mono);font-size:11px;color:var(--good);flex-shrink:0;align-self:center}
+.empty{text-align:center;padding:48px 24px;color:var(--muted);font-size:14px}
+</style>
+</head>
+<body>
+
+<div id="portal-nav" data-active="actions"></div>
+
+<main class="page">
+
+  <div class="greeting fade d1">
+    <div class="greeting-eyebrow">Your Actions</div>
+    <h1 class="greeting-h1">What needs you</h1>
+    <p class="greeting-sub">The few things we need from you to keep moving</p>
+  </div>
+
+  <div class="summary-row fade d2">
+    <div class="summary-card alert"><div class="summary-value">2</div><div class="summary-label">Open</div></div>
+    <div class="summary-card"><div class="summary-value">1</div><div class="summary-label">Due Soon</div></div>
+    <div class="summary-card done"><div class="summary-value">7</div><div class="summary-label">Delivered</div></div>
+  </div>
+
+  <div class="action-tabs fade d2">
+    <button class="action-tab active" data-tab="you">For You</button>
+    <button class="action-tab" data-tab="delivered">Delivered</button>
+  </div>
+
+  <div class="filter-chips fade d3">
+    <button class="filter-chip active" data-pillar="all">All</button>
+    <button class="filter-chip" data-pillar="credit">Credit</button>
+    <button class="filter-chip" data-pillar="debt">Debt</button>
+    <button class="filter-chip" data-pillar="funding">Funding</button>
+    <button class="filter-chip" data-pillar="structure">Structure</button>
+    <button class="filter-chip" data-pillar="balance">Balance</button>
+  </div>
+
+  <!-- FOR YOU -->
+  <div class="action-list" id="list-you">
+    <div class="action-item fade d3" data-pillar="credit">
+      <div class="action-owner you">YOU</div>
+      <div class="action-body">
+        <div class="action-title">Upload your latest business and personal credit reports</div>
+        <div class="action-desc">We use these to refresh your Credit pillar and confirm the next utilization moves.</div>
+        <div class="action-meta"><span class="action-pill">Credit</span><span class="sep">·</span><span class="due-soon">Due in 2 days</span></div>
+      </div>
+      <a href="#" class="action-btn">Upload</a>
+    </div>
+    <div class="action-item fade d4" data-pillar="funding">
+      <div class="action-owner you">YOU</div>
+      <div class="action-body">
+        <div class="action-title">Confirm the two lenders to move forward with</div>
+        <div class="action-desc">Review your matched shortlist and select the two you want us to pursue first.</div>
+        <div class="action-meta"><span class="action-pill">Funding</span><span class="sep">·</span><span>Due in 6 days</span></div>
+      </div>
+      <a href="#" class="action-btn">Review</a>
+    </div>
+  </div>
+
+  <!-- DELIVERED -->
+  <div class="action-list" id="list-delivered" style="display:none">
+    <div class="action-item" data-pillar="debt">
+      <div class="action-owner done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M5 12l5 5L20 7"/></svg></div>
+      <div class="action-body"><div class="action-title">Debt restructure plan delivered</div><div class="action-meta"><span class="action-pill">Debt</span></div></div>
+      <span class="action-completed-at">Day 52</span>
+    </div>
+    <div class="action-item" data-pillar="credit">
+      <div class="action-owner done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M5 12l5 5L20 7"/></svg></div>
+      <div class="action-body"><div class="action-title">Credit optimization roadmap delivered</div><div class="action-meta"><span class="action-pill">Credit</span></div></div>
+      <span class="action-completed-at">Day 44</span>
+    </div>
+    <div class="action-item" data-pillar="funding">
+      <div class="action-owner done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M5 12l5 5L20 7"/></svg></div>
+      <div class="action-body"><div class="action-title">Lender shortlist matched to your profile</div><div class="action-meta"><span class="action-pill">Funding</span></div></div>
+      <span class="action-completed-at">Day 40</span>
+    </div>
+    <div class="action-item" data-pillar="balance">
+      <div class="action-owner done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M5 12l5 5L20 7"/></svg></div>
+      <div class="action-body"><div class="action-title">Cash flow and balance analysis delivered</div><div class="action-meta"><span class="action-pill">Balance</span></div></div>
+      <span class="action-completed-at">Day 30</span>
+    </div>
+    <div class="action-item" data-pillar="structure">
+      <div class="action-owner done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M5 12l5 5L20 7"/></svg></div>
+      <div class="action-body"><div class="action-title">Structure review and entity recommendations</div><div class="action-meta"><span class="action-pill">Structure</span></div></div>
+      <span class="action-completed-at">Day 28</span>
+    </div>
+    <div class="action-item" data-pillar="credit">
+      <div class="action-owner done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M5 12l5 5L20 7"/></svg></div>
+      <div class="action-body"><div class="action-title">Capital Position Report delivered</div><div class="action-meta"><span class="action-pill">All pillars</span></div></div>
+      <span class="action-completed-at">Day 18</span>
+    </div>
+    <div class="action-item" data-pillar="all">
+      <div class="action-owner done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M5 12l5 5L20 7"/></svg></div>
+      <div class="action-body"><div class="action-title">Opening strategy session held</div><div class="action-meta"><span class="action-pill">Kickoff</span></div></div>
+      <span class="action-completed-at">Day 6</span>
+    </div>
+  </div>
+
+</main>
+
+<script src="shared/portal-nav.js"></script>
+<script src="shared/portal-demo.js"></script>
+<script>
+(function(){
+  const tabs=document.querySelectorAll('.action-tab');
+  const chips=document.querySelectorAll('.filter-chip');
+  const listYou=document.getElementById('list-you');
+  const listDel=document.getElementById('list-delivered');
+  let tab='you',pillar='all';
+  function apply(){
+    listYou.style.display = tab==='you'?'flex':'none';
+    listDel.style.display = tab==='delivered'?'flex':'none';
+    const active = tab==='you'?listYou:listDel;
+    active.querySelectorAll('.action-item').forEach(it=>{
+      const p=it.dataset.pillar;
+      it.classList.toggle('hidden', !(pillar==='all'||p===pillar||p==='all'));
+    });
+  }
+  tabs.forEach(t=>t.addEventListener('click',()=>{tabs.forEach(x=>x.classList.remove('active'));t.classList.add('active');tab=t.dataset.tab;apply();}));
+  chips.forEach(c=>c.addEventListener('click',()=>{chips.forEach(x=>x.classList.remove('active'));c.classList.add('active');pillar=c.dataset.pillar;apply();}));
+  apply();
+})();
+</script>
+</body>
+</html>
