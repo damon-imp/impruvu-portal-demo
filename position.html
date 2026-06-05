@@ -151,9 +151,9 @@
       <div class="now-score-num">71</div>
       <div class="now-score-of">out of 100 · Optimizing</div>
       <div class="now-score-meta">
-        <span class="now-chip base">Baseline 595</span>
+        <span class="now-chip base">Baseline 24</span>
         <span class="now-chip delta"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M17 7H9M17 7v8"/></svg> +47</span>
-        <span class="now-chip proj">Projected 780</span>
+        <span class="now-chip proj">Projected 86</span>
       </div>
     </div>
     <div class="pillar-tiles">
@@ -214,12 +214,12 @@
       <div class="factor-row"><div class="factor-sev none"></div><div class="factor-body"><div class="factor-name">Payment history</div><div class="factor-desc">Clean. On-time across all current obligations.</div></div><div class="factor-pts">30/40</div></div>
       <div class="factor-row"><div class="factor-sev minor"></div><div class="factor-body"><div class="factor-name">Debt service coverage</div><div class="factor-desc">Adequate but tight. Improving as restructure lands.</div></div><div class="factor-pts">18/40</div></div>
     </div>
-    <div class="factor-group grow fade d3" id="f-funding">
+    <div class="factor-group grow fade d3" id="f-grow">
       <div class="factor-head"><div class="factor-head-ring">GR</div><div class="factor-head-name">Grow</div><div class="factor-head-score">13 / 20</div></div>
-      <div class="factor-row"><div class="factor-sev minor"></div><div class="factor-body"><div class="factor-name">Current funding capacity</div><div class="factor-desc">Room to grow once credit and structure are optimized.</div></div><div class="factor-pts">24/40</div></div>
+      <div class="factor-row"><div class="factor-sev minor"></div><div class="factor-body"><div class="factor-name">Deployable capital available</div><div class="factor-desc">Room to put capital to work once credit and structure are optimized.</div></div><div class="factor-pts">24/40</div></div>
       <div class="factor-row"><div class="factor-sev none"></div><div class="factor-body"><div class="factor-name">Lender relationships</div><div class="factor-desc">Strong shortlist matched to your profile and goals.</div></div><div class="factor-pts">30/40</div></div>
       <div class="factor-row"><div class="factor-sev minor"></div><div class="factor-body"><div class="factor-name">Terms quality</div><div class="factor-desc">Current terms are improvable. Better options in reach.</div></div><div class="factor-pts">26/40</div></div>
-      <div class="factor-row"><div class="factor-sev none"></div><div class="factor-body"><div class="factor-name">Readiness to fund</div><div class="factor-desc">Position is nearly ready for the next funding round.</div></div><div class="factor-pts">28/40</div></div>
+      <div class="factor-row"><div class="factor-sev none"></div><div class="factor-body"><div class="factor-name">Capacity for low-cost funding</div><div class="factor-desc">Position is nearly ready to access more, cheaper capital when needed.</div></div><div class="factor-pts">28/40</div></div>
       <div class="factor-row"><div class="factor-sev minor"></div><div class="factor-body"><div class="factor-name">Stacking and sequencing</div><div class="factor-desc">Sequence mapped to avoid hurting the next approval.</div></div><div class="factor-pts">20/40</div></div>
     </div>
     <div class="factor-group structure fade d4" id="f-structure">
@@ -266,16 +266,16 @@
 // ── OVER TIME chart engine ──
 (function(){
   const PERIODS = ["Day 1","Day 30","Day 58","Now","Proj"];
-  const COLORS = {total:"#FFFFFF",credit:"#FF8A0A",debt:"#E5484D",funding:"#30A46C",structure:"#8E7BEF",balance:"#0EA5E9"};
-  const RGBA   = {total:"255,255,255",credit:"255,138,10",debt:"229,72,77",funding:"48,164,108",structure:"142,123,239",balance:"14,165,233"};
+  const COLORS = {total:"#FFFFFF",credit:"#FF8A0A",debt:"#E5484D",grow:"#30A46C",structure:"#8E7BEF",balance:"#0EA5E9"};
+  const RGBA   = {total:"255,255,255",credit:"255,138,10",debt:"229,72,77",grow:"48,164,108",structure:"142,123,239",balance:"14,165,233"};
   const NAMES  = {total:"Total Score",credit:"Credit",debt:"Debt",grow:"Grow",structure:"Structure",balance:"Balance"};
   const SERIES = {
-    total:    {max:1000, pts:[595,612,71,71,780]},
-    credit:   {max:200,  pts:[120,131,142,142,176]},
-    debt:     {max:200,  pts:[168,150,136,136,96]},
-    grow:{max:200,  pts:[108,120,128,128,160]},
-    structure:{max:200,  pts:[104,112,120,120,150]},
-    balance:  {max:200,  pts:[120,128,136,136,164]},
+    total:    {max:100, pts:[24,52,71,71,86]},
+    credit:   {max:20,  pts:[12,15,18,18,19]},
+    debt:     {max:20,  pts:[4,6,9,9,17]},
+    grow:     {max:20,  pts:[8,11,13,13,18]},
+    structure:{max:20,  pts:[11,13,15,15,18]},
+    balance:  {max:20,  pts:[13,14,16,16,18]},
   };
   const FACTORS = {
     credit:[
@@ -292,12 +292,12 @@
       {n:"Payment history",                pts:[28,29,30,30,34]},
       {n:"Debt service coverage",          pts:[12,15,18,18,32]},
     ],
-    funding:[
-      {n:"Current funding capacity",       pts:[18,21,24,24,34]},
-      {n:"Lender relationships",           pts:[24,27,30,30,34]},
-      {n:"Terms quality",                  pts:[20,23,26,26,32]},
-      {n:"Readiness to fund",              pts:[24,26,28,28,32]},
-      {n:"Stacking and sequencing",        pts:[14,17,20,20,28]},
+    grow:[
+      {n:"Deployable capital available",   pts:[16,20,24,24,34]},
+      {n:"Untapped credit resources",      pts:[18,22,26,26,34]},
+      {n:"Long-term instrument positioning",pts:[14,18,22,22,32]},
+      {n:"Capacity for low-cost funding",  pts:[20,24,26,26,32]},
+      {n:"Growth runway and reinvestment", pts:[16,20,24,24,30]},
     ],
     structure:[
       {n:"Entity setup",                   pts:[14,17,20,20,32]},
@@ -345,11 +345,11 @@
   // ALL PILLARS = small multiples (one mini chart per series, no overlap)
   function renderGrid(){
     grid.style.display='grid'; single.style.display='none';
-    const order=['total','credit','debt','funding','structure','balance'];
+    const order=['total','credit','debt','grow','structure','balance'];
     grid.innerHTML=order.map(k=>{
       const s=SERIES[k];
       const delta=s.pts[2]-s.pts[0];
-      const denom = k==='total'?'1000':'200';
+      const denom = k==='total'?'100':'20';
       const grad=`smg-${k}`;
       const svg=`<svg class="sm-svg" viewBox="0 0 300 64" preserveAspectRatio="none">
         <defs><linearGradient id="${grad}" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="rgba(${RGBA[k]},.28)"/><stop offset="100%" stop-color="rgba(${RGBA[k]},0)"/></linearGradient></defs>
