@@ -104,7 +104,7 @@
         <div class="demo-notif unread"><div class="demo-notif-icon meeting"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18"/></svg></div><div class="demo-notif-body"><div class="demo-notif-title">Strategy Session starts in 3 hours</div><div class="demo-notif-meta">Today · 1:00p · Zoom</div></div></div>
         <div class="demo-notif"><div class="demo-notif-icon deliverable"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M5 12l5 5L20 7"/></svg></div><div class="demo-notif-body"><div class="demo-notif-title">Debt restructure plan delivered to your Vault</div><div class="demo-notif-meta">2 days ago · Debt</div></div></div>
         <div class="demo-notif"><div class="demo-notif-icon gate"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 2"/></svg></div><div class="demo-notif-body"><div class="demo-notif-title">Phase 2 complete · Funding moves underway</div><div class="demo-notif-meta">4 days ago · Day 42</div></div></div>
-        <div class="demo-notif"><div class="demo-notif-icon deliverable"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M5 12l5 5L20 7"/></svg></div><div class="demo-notif-body"><div class="demo-notif-title">Capital Score updated · +14 since baseline</div><div class="demo-notif-meta">1 week ago · Now at 642</div></div></div>
+        <div class="demo-notif"><div class="demo-notif-icon deliverable"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M5 12l5 5L20 7"/></svg></div><div class="demo-notif-body"><div class="demo-notif-title">Capital Score updated · +14 since baseline</div><div class="demo-notif-meta">1 week ago · Now at 71</div></div></div>
       </div>
       <div class="demo-dropdown-foot">View all notifications</div>`;
     document.body.appendChild(d); return d;
@@ -115,7 +115,7 @@
     const d = document.createElement('div');
     d.className = 'demo-dropdown'; d.id = 'menuDropdown';
     d.innerHTML = `
-      <div class="demo-menu-header"><div class="demo-menu-avatar">MR</div><div><div class="demo-menu-name">Marcus Reyes</div><div class="demo-menu-email">marcus@reyesholdings.com</div></div></div>
+      <div class="demo-menu-header"><div class="demo-menu-avatar">NC</div><div><div class="demo-menu-name">Naomi Castellano</div><div class="demo-menu-email">naomi@castellanobuilt.com</div></div></div>
       <div class="demo-menu-item" data-demo-msg="Profile screen - next build round"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/></svg>Your Profile</div>
       <div class="demo-menu-item" data-demo-msg="Billing screen - next build round"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18"/></svg>Billing & Payments</div>
       <div class="demo-menu-item" data-demo-msg="Service Agreement - view your engagement terms"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M9 9h6M9 13h6M9 17h3"/></svg>Engagement Agreement</div>

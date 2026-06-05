@@ -36,7 +36,7 @@
 .pillar-ring{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:var(--font-mono);font-weight:700;font-size:15px;color:#fff}
 .pillar-tile.credit .pillar-ring{background:rgba(255,138,10,.14);color:var(--pillar-credit);border:1px solid rgba(255,138,10,.3)}
 .pillar-tile.debt .pillar-ring{background:rgba(229,72,77,.14);color:var(--pillar-debt);border:1px solid rgba(229,72,77,.3)}
-.pillar-tile.funding .pillar-ring{background:rgba(48,164,108,.14);color:var(--pillar-funding);border:1px solid rgba(48,164,108,.3)}
+.pillar-tile.grow .pillar-ring{background:rgba(48,164,108,.14);color:var(--pillar-grow);border:1px solid rgba(48,164,108,.3)}
 .pillar-tile.structure .pillar-ring{background:rgba(142,123,239,.14);color:var(--pillar-structure);border:1px solid rgba(142,123,239,.3)}
 .pillar-tile.balance .pillar-ring{background:rgba(14,165,233,.14);color:var(--pillar-balance);border:1px solid rgba(14,165,233,.3)}
 .pillar-tile-body{flex:1;min-width:0}
@@ -45,7 +45,7 @@
 .pillar-tile-bar-fill{height:100%;border-radius:3px}
 .pillar-tile.credit .pillar-tile-bar-fill{background:var(--pillar-credit)}
 .pillar-tile.debt .pillar-tile-bar-fill{background:var(--pillar-debt)}
-.pillar-tile.funding .pillar-tile-bar-fill{background:var(--pillar-funding)}
+.pillar-tile.grow .pillar-tile-bar-fill{background:var(--pillar-grow)}
 .pillar-tile.structure .pillar-tile-bar-fill{background:var(--pillar-structure)}
 .pillar-tile.balance .pillar-tile-bar-fill{background:var(--pillar-balance)}
 .pillar-tile-meta{font-size:12px;color:var(--muted)}
@@ -62,7 +62,7 @@
 .ot-chip[data-series="total"].active{border-color:rgba(255,255,255,.25)}
 .ot-chip[data-series="credit"].active{border-color:rgba(255,138,10,.5);background:rgba(255,138,10,.08)}
 .ot-chip[data-series="debt"].active{border-color:rgba(229,72,77,.5);background:rgba(229,72,77,.08)}
-.ot-chip[data-series="funding"].active{border-color:rgba(48,164,108,.5);background:rgba(48,164,108,.08)}
+.ot-chip[data-series="grow"].active{border-color:rgba(48,164,108,.5);background:rgba(48,164,108,.08)}
 .ot-chip[data-series="structure"].active{border-color:rgba(142,123,239,.5);background:rgba(142,123,239,.08)}
 .ot-chip[data-series="balance"].active{border-color:rgba(14,165,233,.5);background:rgba(14,165,233,.08)}
 .chart-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;margin-bottom:6px}
@@ -103,7 +103,7 @@
 .factor-head-ring{width:40px;height:40px;border-radius:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:var(--font-mono);font-weight:700;font-size:12px}
 .factor-group.credit .factor-head-ring{background:rgba(255,138,10,.14);color:var(--pillar-credit)}
 .factor-group.debt .factor-head-ring{background:rgba(229,72,77,.14);color:var(--pillar-debt)}
-.factor-group.funding .factor-head-ring{background:rgba(48,164,108,.14);color:var(--pillar-funding)}
+.factor-group.grow .factor-head-ring{background:rgba(48,164,108,.14);color:var(--pillar-grow)}
 .factor-group.structure .factor-head-ring{background:rgba(142,123,239,.14);color:var(--pillar-structure)}
 .factor-group.balance .factor-head-ring{background:rgba(14,165,233,.14);color:var(--pillar-balance)}
 .factor-head-name{font-family:var(--font-display);font-size:16px;font-weight:700;color:var(--text-strong)}
@@ -148,8 +148,8 @@
   <div class="view-pane active" id="pane-now">
     <div class="now-score fade d2">
       <div class="now-score-label">Capital Score</div>
-      <div class="now-score-num">642</div>
-      <div class="now-score-of">out of 1000 · Building</div>
+      <div class="now-score-num">71</div>
+      <div class="now-score-of">out of 100 · Optimizing</div>
       <div class="now-score-meta">
         <span class="now-chip base">Baseline 595</span>
         <span class="now-chip delta"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M17 7H9M17 7v8"/></svg> +47</span>
@@ -157,11 +157,11 @@
       </div>
     </div>
     <div class="pillar-tiles">
-      <button class="pillar-tile credit fade d3" data-pillar="credit"><div class="pillar-ring">71</div><div class="pillar-tile-body"><div class="pillar-tile-name">Credit</div><div class="pillar-tile-bar"><div class="pillar-tile-bar-fill" style="width:71%"></div></div><div class="pillar-tile-meta">Personal and business credit profile</div></div><div class="pillar-tile-score">142<span style="color:var(--muted);font-size:12px">/200</span></div><div class="pillar-tile-chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 6l6 6-6 6"/></svg></div></button>
-      <button class="pillar-tile debt fade d3" data-pillar="debt"><div class="pillar-ring">58</div><div class="pillar-tile-body"><div class="pillar-tile-name">Debt</div><div class="pillar-tile-bar"><div class="pillar-tile-bar-fill" style="width:58%"></div></div><div class="pillar-tile-meta">Load, utilization, and restructure opportunity</div></div><div class="pillar-tile-score">116<span style="color:var(--muted);font-size:12px">/200</span></div><div class="pillar-tile-chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 6l6 6-6 6"/></svg></div></button>
-      <button class="pillar-tile funding fade d4" data-pillar="funding"><div class="pillar-ring">64</div><div class="pillar-tile-body"><div class="pillar-tile-name">Funding</div><div class="pillar-tile-bar"><div class="pillar-tile-bar-fill" style="width:64%"></div></div><div class="pillar-tile-meta">Capacity, access, and terms</div></div><div class="pillar-tile-score">128<span style="color:var(--muted);font-size:12px">/200</span></div><div class="pillar-tile-chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 6l6 6-6 6"/></svg></div></button>
-      <button class="pillar-tile structure fade d4" data-pillar="structure"><div class="pillar-ring">60</div><div class="pillar-tile-body"><div class="pillar-tile-name">Structure</div><div class="pillar-tile-bar"><div class="pillar-tile-bar-fill" style="width:60%"></div></div><div class="pillar-tile-meta">Entities, accounts, protection, separation</div></div><div class="pillar-tile-score">120<span style="color:var(--muted);font-size:12px">/200</span></div><div class="pillar-tile-chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 6l6 6-6 6"/></svg></div></button>
-      <button class="pillar-tile balance fade d5" data-pillar="balance"><div class="pillar-ring">68</div><div class="pillar-tile-body"><div class="pillar-tile-name">Balance</div><div class="pillar-tile-bar"><div class="pillar-tile-bar-fill" style="width:68%"></div></div><div class="pillar-tile-meta">Inflow, outflow, ratios, liabilities</div></div><div class="pillar-tile-score">136<span style="color:var(--muted);font-size:12px">/200</span></div><div class="pillar-tile-chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 6l6 6-6 6"/></svg></div></button>
+      <button class="pillar-tile credit fade d3" data-pillar="credit"><div class="pillar-ring">18</div><div class="pillar-tile-body"><div class="pillar-tile-name">Credit</div><div class="pillar-tile-bar"><div class="pillar-tile-bar-fill" style="width:90%"></div></div><div class="pillar-tile-meta">Personal and business credit profile</div></div><div class="pillar-tile-score">18<span style="color:var(--muted);font-size:12px">/20</span></div><div class="pillar-tile-chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 6l6 6-6 6"/></svg></div></button>
+      <button class="pillar-tile debt fade d3" data-pillar="debt"><div class="pillar-ring">9</div><div class="pillar-tile-body"><div class="pillar-tile-name">Debt</div><div class="pillar-tile-bar"><div class="pillar-tile-bar-fill" style="width:45%"></div></div><div class="pillar-tile-meta">Load, utilization, and restructure opportunity</div></div><div class="pillar-tile-score">9<span style="color:var(--muted);font-size:12px">/20</span></div><div class="pillar-tile-chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 6l6 6-6 6"/></svg></div></button>
+      <button class="pillar-tile grow fade d4" data-pillar="grow"><div class="pillar-ring">13</div><div class="pillar-tile-body"><div class="pillar-tile-name">Grow</div><div class="pillar-tile-bar"><div class="pillar-tile-bar-fill" style="width:65%"></div></div><div class="pillar-tile-meta">Capacity, access, and terms</div></div><div class="pillar-tile-score">13<span style="color:var(--muted);font-size:12px">/20</span></div><div class="pillar-tile-chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 6l6 6-6 6"/></svg></div></button>
+      <button class="pillar-tile structure fade d4" data-pillar="structure"><div class="pillar-ring">15</div><div class="pillar-tile-body"><div class="pillar-tile-name">Structure</div><div class="pillar-tile-bar"><div class="pillar-tile-bar-fill" style="width:75%"></div></div><div class="pillar-tile-meta">Entities, accounts, protection, separation</div></div><div class="pillar-tile-score">15<span style="color:var(--muted);font-size:12px">/20</span></div><div class="pillar-tile-chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 6l6 6-6 6"/></svg></div></button>
+      <button class="pillar-tile balance fade d5" data-pillar="balance"><div class="pillar-ring">16</div><div class="pillar-tile-body"><div class="pillar-tile-name">Balance</div><div class="pillar-tile-bar"><div class="pillar-tile-bar-fill" style="width:80%"></div></div><div class="pillar-tile-meta">Inflow, outflow, ratios, liabilities</div></div><div class="pillar-tile-score">16<span style="color:var(--muted);font-size:12px">/20</span></div><div class="pillar-tile-chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 6l6 6-6 6"/></svg></div></button>
     </div>
   </div>
 
@@ -172,7 +172,7 @@
       <button class="ot-chip" data-series="total"><span class="swatch" style="background:#fff"></span>Total Score</button>
       <button class="ot-chip" data-series="credit"><span class="swatch" style="background:var(--pillar-credit)"></span>Credit</button>
       <button class="ot-chip" data-series="debt"><span class="swatch" style="background:var(--pillar-debt)"></span>Debt</button>
-      <button class="ot-chip" data-series="funding"><span class="swatch" style="background:var(--pillar-funding)"></span>Funding</button>
+      <button class="ot-chip" data-series="grow"><span class="swatch" style="background:var(--pillar-grow)"></span>Grow</button>
       <button class="ot-chip" data-series="structure"><span class="swatch" style="background:var(--pillar-structure)"></span>Structure</button>
       <button class="ot-chip" data-series="balance"><span class="swatch" style="background:var(--pillar-balance)"></span>Balance</button>
     </div>
@@ -199,7 +199,7 @@
   <!-- BY PILLAR -->
   <div class="view-pane" id="pane-pillar">
     <div class="factor-group credit fade d2" id="f-credit">
-      <div class="factor-head"><div class="factor-head-ring">CR</div><div class="factor-head-name">Credit</div><div class="factor-head-score">142 / 200</div></div>
+      <div class="factor-head"><div class="factor-head-ring">CR</div><div class="factor-head-name">Credit</div><div class="factor-head-score">18 / 20</div></div>
       <div class="factor-row"><div class="factor-sev minor"></div><div class="factor-body"><div class="factor-name">Business credit profile depth</div><div class="factor-desc">Thin file. Few reporting tradelines established under the entity.</div></div><div class="factor-pts">26/40</div></div>
       <div class="factor-row"><div class="factor-sev none"></div><div class="factor-body"><div class="factor-name">Personal credit standing</div><div class="factor-desc">Strong. No standing negatives, healthy history.</div></div><div class="factor-pts">36/40</div></div>
       <div class="factor-row"><div class="factor-sev moderate"></div><div class="factor-body"><div class="factor-name">Utilization across revolving lines</div><div class="factor-desc">Running high. Above the threshold that suppresses scoring.</div></div><div class="factor-pts">22/40</div></div>
@@ -207,15 +207,15 @@
       <div class="factor-row"><div class="factor-sev none"></div><div class="factor-body"><div class="factor-name">Account age and mix</div><div class="factor-desc">Good seasoning and a healthy mix of account types.</div></div><div class="factor-pts">28/40</div></div>
     </div>
     <div class="factor-group debt fade d3" id="f-debt">
-      <div class="factor-head"><div class="factor-head-ring">DE</div><div class="factor-head-name">Debt</div><div class="factor-head-score">116 / 200</div></div>
+      <div class="factor-head"><div class="factor-head-ring">DE</div><div class="factor-head-name">Debt</div><div class="factor-head-score">9 / 20</div></div>
       <div class="factor-row"><div class="factor-sev moderate"></div><div class="factor-body"><div class="factor-name">Total debt load vs capacity</div><div class="factor-desc">Carrying more than the position comfortably supports.</div></div><div class="factor-pts">20/40</div></div>
       <div class="factor-row"><div class="factor-sev moderate"></div><div class="factor-body"><div class="factor-name">Blended interest rate</div><div class="factor-desc">Paying above-market rates relative to your profile.</div></div><div class="factor-pts">22/40</div></div>
       <div class="factor-row"><div class="factor-sev minor"></div><div class="factor-body"><div class="factor-name">Restructure opportunity</div><div class="factor-desc">Clear consolidation and renegotiation moves available.</div></div><div class="factor-pts">26/40</div></div>
       <div class="factor-row"><div class="factor-sev none"></div><div class="factor-body"><div class="factor-name">Payment history</div><div class="factor-desc">Clean. On-time across all current obligations.</div></div><div class="factor-pts">30/40</div></div>
       <div class="factor-row"><div class="factor-sev minor"></div><div class="factor-body"><div class="factor-name">Debt service coverage</div><div class="factor-desc">Adequate but tight. Improving as restructure lands.</div></div><div class="factor-pts">18/40</div></div>
     </div>
-    <div class="factor-group funding fade d3" id="f-funding">
-      <div class="factor-head"><div class="factor-head-ring">FU</div><div class="factor-head-name">Funding</div><div class="factor-head-score">128 / 200</div></div>
+    <div class="factor-group grow fade d3" id="f-funding">
+      <div class="factor-head"><div class="factor-head-ring">GR</div><div class="factor-head-name">Grow</div><div class="factor-head-score">13 / 20</div></div>
       <div class="factor-row"><div class="factor-sev minor"></div><div class="factor-body"><div class="factor-name">Current funding capacity</div><div class="factor-desc">Room to grow once credit and structure are optimized.</div></div><div class="factor-pts">24/40</div></div>
       <div class="factor-row"><div class="factor-sev none"></div><div class="factor-body"><div class="factor-name">Lender relationships</div><div class="factor-desc">Strong shortlist matched to your profile and goals.</div></div><div class="factor-pts">30/40</div></div>
       <div class="factor-row"><div class="factor-sev minor"></div><div class="factor-body"><div class="factor-name">Terms quality</div><div class="factor-desc">Current terms are improvable. Better options in reach.</div></div><div class="factor-pts">26/40</div></div>
@@ -223,7 +223,7 @@
       <div class="factor-row"><div class="factor-sev minor"></div><div class="factor-body"><div class="factor-name">Stacking and sequencing</div><div class="factor-desc">Sequence mapped to avoid hurting the next approval.</div></div><div class="factor-pts">20/40</div></div>
     </div>
     <div class="factor-group structure fade d4" id="f-structure">
-      <div class="factor-head"><div class="factor-head-ring">ST</div><div class="factor-head-name">Structure</div><div class="factor-head-score">120 / 200</div></div>
+      <div class="factor-head"><div class="factor-head-ring">ST</div><div class="factor-head-name">Structure</div><div class="factor-head-score">15 / 20</div></div>
       <div class="factor-row"><div class="factor-sev moderate"></div><div class="factor-body"><div class="factor-name">Entity setup</div><div class="factor-desc">Single entity carrying everything. Separation needed.</div></div><div class="factor-pts">20/40</div></div>
       <div class="factor-row"><div class="factor-sev minor"></div><div class="factor-body"><div class="factor-name">Liability separation</div><div class="factor-desc">Personal and business exposure not fully separated.</div></div><div class="factor-pts">24/40</div></div>
       <div class="factor-row"><div class="factor-sev minor"></div><div class="factor-body"><div class="factor-name">Banking and accounts</div><div class="factor-desc">Functional but not optimized for the structure ahead.</div></div><div class="factor-pts">26/40</div></div>
@@ -231,7 +231,7 @@
       <div class="factor-row"><div class="factor-sev minor"></div><div class="factor-body"><div class="factor-name">Asset protection</div><div class="factor-desc">Gaps to close as multi-entity structure is built.</div></div><div class="factor-pts">22/40</div></div>
     </div>
     <div class="factor-group balance fade d4" id="f-balance">
-      <div class="factor-head"><div class="factor-head-ring">BA</div><div class="factor-head-name">Balance</div><div class="factor-head-score">136 / 200</div></div>
+      <div class="factor-head"><div class="factor-head-ring">BA</div><div class="factor-head-name">Balance</div><div class="factor-head-score">16 / 20</div></div>
       <div class="factor-row"><div class="factor-sev none"></div><div class="factor-body"><div class="factor-name">Income stability</div><div class="factor-desc">Consistent inflow across business and personal.</div></div><div class="factor-pts">32/40</div></div>
       <div class="factor-row"><div class="factor-sev minor"></div><div class="factor-body"><div class="factor-name">Cash flow ratio</div><div class="factor-desc">Positive but tighter than ideal for the debt load.</div></div><div class="factor-pts">26/40</div></div>
       <div class="factor-row"><div class="factor-sev none"></div><div class="factor-body"><div class="factor-name">Reserve position</div><div class="factor-desc">Healthy runway held in reserve.</div></div><div class="factor-pts">30/40</div></div>
@@ -268,12 +268,12 @@
   const PERIODS = ["Day 1","Day 30","Day 58","Now","Proj"];
   const COLORS = {total:"#FFFFFF",credit:"#FF8A0A",debt:"#E5484D",funding:"#30A46C",structure:"#8E7BEF",balance:"#0EA5E9"};
   const RGBA   = {total:"255,255,255",credit:"255,138,10",debt:"229,72,77",funding:"48,164,108",structure:"142,123,239",balance:"14,165,233"};
-  const NAMES  = {total:"Total Score",credit:"Credit",debt:"Debt",funding:"Funding",structure:"Structure",balance:"Balance"};
+  const NAMES  = {total:"Total Score",credit:"Credit",debt:"Debt",grow:"Grow",structure:"Structure",balance:"Balance"};
   const SERIES = {
-    total:    {max:1000, pts:[595,612,642,642,780]},
+    total:    {max:1000, pts:[595,612,71,71,780]},
     credit:   {max:200,  pts:[120,131,142,142,176]},
-    debt:     {max:200,  pts:[96,108,116,116,168]},
-    funding:  {max:200,  pts:[108,120,128,128,160]},
+    debt:     {max:200,  pts:[168,150,136,136,96]},
+    grow:{max:200,  pts:[108,120,128,128,160]},
     structure:{max:200,  pts:[104,112,120,120,150]},
     balance:  {max:200,  pts:[120,128,136,136,164]},
   };
@@ -373,14 +373,14 @@
     if(key==='total'){
       chart.innerHTML=`<defs>${defs}</defs>${gridLines(600,220,18,18)}${lineSVG(s.pts,s.max,COLORS[key],3,true,grad,600,220,18,18)}`;
       sub.textContent="Your total Capital Score across the engagement";
-      legend.innerHTML=`<span class="ot-leg"><span class="dot" style="background:${COLORS[key]}"></span>Total Score<span class="val">${s.pts[2]} / 1000</span></span>`;
+      legend.innerHTML=`<span class="ot-leg"><span class="dot" style="background:${COLORS[key]}"></span>Total Score<span class="val">${s.pts[2]} / 100</span></span>`;
       note.style.display='none';
       return;
     }
     // pillar: just this pillar's line, clean. Factor detail lives in the By Pillar tab.
     sub.textContent=`Your ${NAMES[key]} pillar across the engagement`;
     chart.innerHTML=`<defs>${defs}</defs>${gridLines(600,220,18,18)}${lineSVG(s.pts,s.max,COLORS[key],3,true,grad,600,220,18,18)}`;
-    legend.innerHTML=`<span class="ot-leg"><span class="dot" style="background:${COLORS[key]}"></span>${NAMES[key]}<span class="val">${s.pts[2]} / 200</span></span><span class="ot-leg"><span class="dot" style="background:rgba(255,255,255,.25)"></span>Baseline<span class="val">${s.pts[0]}</span></span><span class="ot-leg"><span class="dot" style="background:rgba(255,255,255,.25)"></span>Projected<span class="val">${s.pts[4]}</span></span>`;
+    legend.innerHTML=`<span class="ot-leg"><span class="dot" style="background:${COLORS[key]}"></span>${NAMES[key]}<span class="val">${s.pts[2]} / 100</span></span><span class="ot-leg"><span class="dot" style="background:rgba(255,255,255,.25)"></span>Baseline<span class="val">${s.pts[0]}</span></span><span class="ot-leg"><span class="dot" style="background:rgba(255,255,255,.25)"></span>Projected<span class="val">${s.pts[4]}</span></span>`;
     note.style.display='block';
     note.innerHTML=`<strong>${NAMES[key]}:</strong> your ${NAMES[key].toLowerCase()} pillar score trended from baseline through today to your projected target. For the factor-level breakdown, see the By Pillar tab.`;
   }

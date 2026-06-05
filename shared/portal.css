@@ -28,7 +28,7 @@
   /* Pillars (locked order: Credit, Debt, Funding, Structure, Balance) */
   --pillar-credit:#FF8A0A;
   --pillar-debt:#E5484D;
-  --pillar-funding:#30A46C;
+  --pillar-funding:#30A46C; --pillar-grow:#30A46C;
   --pillar-structure:#8E7BEF;
   --pillar-balance:#0EA5E9;
 

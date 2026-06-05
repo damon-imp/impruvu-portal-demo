@@ -8,7 +8,7 @@ Per-client portal for Impruvu capital advisory engagements. Mobile-first, dark t
 
 Open `index.html` in a browser. It redirects to `hub.html` (the home screen). Click around all 6 screens via the bottom tab bar (mobile) or top nav (desktop >=768px).
 
-Every page uses sample data for **Reyes Holdings / Marcus Reyes / Day 58 of 180 / Phase 2 Execution**.
+Every page uses sample data for **Castellano Built / Naomi Castellano / Day 58 of 180 / Phase 2 Execution**.
 
 ---
 
@@ -35,7 +35,7 @@ impruvu-portal/
 ## The Model (what this portal reflects)
 
 - **Capital Score** out of 1000. The portal analog of the Capital Plan diagnostic.
-- **Five pillars** (locked order): Credit, Debt, Funding, Structure, Balance. Each scored /200.
+- **Five pillars** (locked order): Credit, Debt, Structure, Balance, Grow. Each scored /20.
   - Balance = inflow, outflow, ratios, liabilities (personal + business).
 - **Engagement phases**: 90-day (Standard) or 180-day (Advanced). Sample shows 180/4-phase.
 - **The Capital Playbook**: the capstone deliverable, featured in the Vault.
